@@ -46,10 +46,8 @@ void HIDRelay::ParseHIDData(USBHID *hid, uint8_t ep, bool is_rpt_id,
   //    DEBUG_PRINTLN(len);
 
   for (uint8_t i = 0; i < len; i++) {
-    Serial.write((uint8_t)buf[i]);
-
-    //            DEBUG_PRINTF((uint8_t)buf[i], HEX);
-    //            DEBUG_PRINT(",");
+    uint8_t current = (uint8_t)buf[i];
+    Serial.write(current);
   }
   DEBUG_PRINT("\r\n");
 };
@@ -63,6 +61,87 @@ class KbdRptParser : public HIDRelay {
 
 void KbdRptParser::ParseHIDData(USBHID *hid, uint8_t ep, bool is_rpt_id,
                                 uint8_t len, uint8_t *buf) {
+  uint8_t bufFirst = buf[0];
+
+  if (bufFirst == 3) {  // Multi media key detector
+    uint8_t bufSecond = buf[1];
+    if (bufSecond == 233) {  // Volume up 233
+
+      Serial.write((uint8_t)0xFD);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x10);
+      Serial.write((uint8_t)0x00);
+      Serial.write((uint8_t)0xFD);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x00);
+      
+      return;
+    } else if (bufSecond == 234) {  // Volume down 234
+
+      Serial.write((uint8_t)0xFD);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x20);
+      Serial.write((uint8_t)0x00);
+      Serial.write((uint8_t)0xFD);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x00);
+      return;
+    } else if (bufSecond == 226) {  // Mute 226
+
+      Serial.write((uint8_t)0xFD);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x40);
+      Serial.write((uint8_t)0x00);
+      Serial.write((uint8_t)0xFD);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x00);
+      return;
+    } else if (bufSecond == 181) {  // Next 181
+
+      // Serial.write((uint8_t)0xFD);
+      // Serial.write((uint8_t)0x03);
+      // Serial.write((uint8_t)0x03);
+      // Serial.write((uint8_t)0x00);
+      // Serial.write((uint8_t)0x01);
+      // Serial.write((uint8_t)0xFD);
+      // Serial.write((uint8_t)0x03);
+      //  Serial.write((uint8_t)0x03);
+      // Serial.write((uint8_t)0x00);
+      return;
+    } else if (bufSecond == 182) {  // Prev 182
+
+      //  Serial.write((uint8_t)0xFD);
+      // Serial.write((uint8_t)0x03);
+      // Serial.write((uint8_t)0x03);
+      // Serial.write((uint8_t)0x00);
+      // Serial.write((uint8_t)0x02);
+      // Serial.write((uint8_t)0xFD);
+      // Serial.write((uint8_t)0x03);
+      //   Serial.write((uint8_t)0x03);
+      // Serial.write((uint8_t)0x00);
+      return;
+    } else if (bufSecond == 205) {  // Play/Pause 205
+
+      Serial.write((uint8_t)0xFD);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x80);
+      Serial.write((uint8_t)0x00);
+      Serial.write((uint8_t)0xFD);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x00);
+
+      return;
+    }
+  }
+
   //    DEBUG_PRINTLN("Kbd");
 
   Serial.write((uint8_t)0xFD);  // BT-HID: Start Byte
@@ -146,4 +225,12 @@ void setup() {
   // HidKeyboard.SetReportParser(0, &KbdPrs);
 }
 
-void loop() { Usb.Task(); }
+void loop() { 
+  Usb.Task(); 
+   /* reading the keyboard */
+       if(Serial.available()) {
+         uint8_t data= Serial.read();
+         /* sending to the phone */
+        uint8_t  rcode = KbdPrs.SndRpt(1, &data);
+       }
+}
