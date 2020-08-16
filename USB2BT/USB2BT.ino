@@ -76,6 +76,9 @@ void KbdRptParser::ParseHIDData(USBHID *hid, uint8_t ep, bool is_rpt_id,
       Serial.write((uint8_t)0x03);
       Serial.write((uint8_t)0x03);
       Serial.write((uint8_t)0x00);
+      Serial.write((uint8_t)0x00);
+
+
       
       return;
     } else if (bufSecond == 234) {  // Volume down 234
@@ -89,6 +92,7 @@ void KbdRptParser::ParseHIDData(USBHID *hid, uint8_t ep, bool is_rpt_id,
       Serial.write((uint8_t)0x03);
       Serial.write((uint8_t)0x03);
       Serial.write((uint8_t)0x00);
+      Serial.write((uint8_t)0x00);
       return;
     } else if (bufSecond == 226) {  // Mute 226
 
@@ -101,30 +105,33 @@ void KbdRptParser::ParseHIDData(USBHID *hid, uint8_t ep, bool is_rpt_id,
       Serial.write((uint8_t)0x03);
       Serial.write((uint8_t)0x03);
       Serial.write((uint8_t)0x00);
+      Serial.write((uint8_t)0x00);
       return;
     } else if (bufSecond == 181) {  // Next 181
 
-      // Serial.write((uint8_t)0xFD);
-      // Serial.write((uint8_t)0x03);
-      // Serial.write((uint8_t)0x03);
-      // Serial.write((uint8_t)0x00);
-      // Serial.write((uint8_t)0x01);
-      // Serial.write((uint8_t)0xFD);
-      // Serial.write((uint8_t)0x03);
-      //  Serial.write((uint8_t)0x03);
-      // Serial.write((uint8_t)0x00);
+      Serial.write((uint8_t)0xFD);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x00);
+      Serial.write((uint8_t)0x01);
+      Serial.write((uint8_t)0xFD);
+      Serial.write((uint8_t)0x03); 
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x00);
+      Serial.write((uint8_t)0x00);
       return;
     } else if (bufSecond == 182) {  // Prev 182
 
-      //  Serial.write((uint8_t)0xFD);
-      // Serial.write((uint8_t)0x03);
-      // Serial.write((uint8_t)0x03);
-      // Serial.write((uint8_t)0x00);
-      // Serial.write((uint8_t)0x02);
-      // Serial.write((uint8_t)0xFD);
-      // Serial.write((uint8_t)0x03);
-      //   Serial.write((uint8_t)0x03);
-      // Serial.write((uint8_t)0x00);
+      Serial.write((uint8_t)0xFD);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x00);
+      Serial.write((uint8_t)0x02);
+      Serial.write((uint8_t)0xFD);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x00);
+      Serial.write((uint8_t)0x00);
       return;
     } else if (bufSecond == 205) {  // Play/Pause 205
 
@@ -136,6 +143,7 @@ void KbdRptParser::ParseHIDData(USBHID *hid, uint8_t ep, bool is_rpt_id,
       Serial.write((uint8_t)0xFD);
       Serial.write((uint8_t)0x03);
       Serial.write((uint8_t)0x03);
+      Serial.write((uint8_t)0x00);
       Serial.write((uint8_t)0x00);
 
       return;
